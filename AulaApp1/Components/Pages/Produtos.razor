@@ -1,17 +1,47 @@
 ﻿@page "/produtos"
 
-<h3 class="mb-4">Produtos</h3>
+<h3 class="mb-4"> Produtos </h3>
 <div class="row">
-<input @bind="nome" />
-<input type="number" @bind="preco" />
-<input type="number" @bind="quantidade" />
-<button class="btn btn-primary" @onclick="AdicionarProduto">Adicionar produto</button>
-<ul>
-	@foreach (var p in produtos)
-	{
-		<li>@p.Nome: R$@p.Preco</li>
-	}
-</ul>
+	<div class="col-md-4">
+		<div class="card card-body">
+			<label class="form-label">Nome</label>
+			<input class="form-control" @bind="nome" />
+			<label class="form-label">Preço</label>
+			<input class="form-control" type="number" @bind="preco" />
+			<label class="form-label">Quantidade</label>
+			<input class="form-control" type="number" @bind="quantidade" />
+			<button class="btn btn-primary" @onclick="AdicionarProduto">Adicionar produto</button>
+		</div>
+	</div>
+	<div class="col-md-8">
+		<table class="table table-striped">
+			<thead>
+			<tr>
+				<th scope="col">Nome</th>
+				<th scope="col">Preço</th>
+				<th scope="col">Quantidade</th>
+			</tr>
+			</thead>
+			<tbody>
+			@if (nome.Length == 0)
+			{
+				<p class="text-muted">Nenhum produto cadastrado.</p>
+			}
+			else
+			{
+				@foreach (var p in produtos)
+				{
+					<tr>
+						<td>@p.Nome</td>
+						<td>R$@p.Preco.ToString("N2")</td>
+						<td>@quantidade</td>
+					</tr>
+				}
+			}
+			
+			</tbody>
+		</table>
+	</div>
 </div>
 @code {
 	private string nome = "";
