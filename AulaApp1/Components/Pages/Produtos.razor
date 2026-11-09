@@ -1,63 +1,60 @@
-﻿@page "/produtos"
+@page "/produtos"
 
-<h3 class="mb-4"> Produtos </h3>
+<h3 class="mb-4">Produtos</h3>
 <div class="row">
 	<div class="col-md-4">
 		<div class="card card-body">
-			<label class="form-label">Nome</label>
-			<input class="form-control" @bind="nome" />
-			<label class="form-label">Preço</label>
-			<input class="form-control" type="number" @bind="preco" />
-			<label class="form-label">Quantidade</label>
-			<input class="form-control" type="number" @bind="quantidade" />
-			<button class="btn btn-primary" @onclick="AdicionarProduto">Adicionar produto</button>
+			<EditForm Model="produto" OnValidSubmit="AdicionarProduto">
+				<DataAnnotationsValidator />
+				<div class="mb-3">
+					<label class="form-label">Nome</label>
+					<InputText class="form-control" @bind-Value="produto.Nome" />
+					<ValidationMessage For="() => produto.Nome" />
+				</div>
+				<div class="mb-3">
+					<label class="form-label">Preço</label>
+					<InputNumber class="form-control" @bind-Value="produto.Preco" />
+					<ValidationMessage For="() => produto.Preco" />
+				</div>
+				<button type="submit" class="btn btn-primary">Adicionar produto</button>
+			</EditForm>
 		</div>
 	</div>
 	<div class="col-md-8">
-		<table class="table table-striped">
-			<thead>
-			<tr>
-				<th scope="col">Nome</th>
-				<th scope="col">Preço</th>
-				<th scope="col">Quantidade</th>
-			</tr>
-			</thead>
-			<tbody>
-			@if (nome.Length == 0)
-			{
-				<p class="text-muted">Nenhum produto cadastrado.</p>
-			}
-			else
-			{
-				@foreach (var p in produtos)
-				{
+		@if (produtos.Count == 0)
+		{
+			<p class="text-muted">Nenhum produto cadastrado.</p>
+		}
+		else
+		{
+			<table class="table table-striped">
+				<thead>
 					<tr>
-						<td>@p.Nome</td>
-						<td>R$@p.Preco.ToString("N2")</td>
-						<td>@quantidade</td>
+						<th scope="col">Nome</th>
+						<th scope="col">Preço</th>
 					</tr>
-				}
-			}
-			
-			</tbody>
-		</table>
+				</thead>
+				<tbody>
+					@foreach (var p in produtos)
+					{
+						<tr>
+							<td>@p.Nome</td>
+							<td>R$@p.Preco.ToString("N2")</td>
+						</tr>
+					}
+				</tbody>
+			</table>
+		}
 	</div>
 </div>
-@code {
-	private string nome = "";
-	private decimal preco;
-	private int quantidade;
 
+@code {
+	private Produto produto = new();
 	private List<Produto> produtos = new();
 
 	private void AdicionarProduto()
 	{
-		produtos.Add(new Produto
-		{
-			Nome = nome,
-			Preco = preco
-		});
-		nome = "";
-		preco = 0;
+		produtos.Add(produto);
+		produto = new();
 	}
 }
